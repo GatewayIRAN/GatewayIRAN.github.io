@@ -122,14 +122,17 @@
     local('.btn-primary', '--bx', '--by');
   }
 
-  /* ------------------------------------------- theme-aware flow art ---- */
-  // The diagram ships in two tones. Swap the source with the theme instead of
-  // shipping one washed-out version that suits neither.
-  const flow = document.getElementById('flow');
-  if (flow) {
+  /* ---------------------------------------------- theme-aware art ------ */
+  // Artwork ships in two tones. Swapping the source with the theme beats
+  // shipping one washed-out version that suits neither background.
+  const themed = document.querySelectorAll('img.themed');
+  if (themed.length) {
     const swap = () => {
-      const want = root.dataset.theme === 'light' ? 'assets/flow-light.svg' : 'assets/flow-dark.svg';
-      if (!flow.src.endsWith(want)) flow.src = want;
+      const key = root.dataset.theme === 'light' ? 'light' : 'dark';
+      themed.forEach(img => {
+        const want = img.dataset[key];
+        if (want && !img.getAttribute('src').endsWith(want)) img.setAttribute('src', want);
+      });
     };
     swap();
     new MutationObserver(swap).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
